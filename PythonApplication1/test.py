@@ -239,7 +239,7 @@ class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi(runDirectory + "/test.ui", self)
-
+        QtGui.QFontDatabase.addApplicationFont(runDirectory +"/三极纤云简体.ttf")
 
         self.thread = UpdateTime() # 创建一个线程
         self.thread.signal.connect(self.TimeTick) #绑定信号触法的函数

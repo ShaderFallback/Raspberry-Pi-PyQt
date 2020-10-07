@@ -113,10 +113,13 @@
             </property>
             <property name="font">
              <font>
-              <family>Arial</family>
-              <pointsize>70</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <family>三极纤云简体</family>
+              <pointsize>72</pointsize>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+              <underline>false</underline>
+              <kerning>true</kerning>
              </font>
             </property>
             <property name="autoFillBackground">
@@ -181,8 +184,10 @@
             </property>
             <property name="font">
              <font>
-              <family>Arial</family>
-              <pointsize>40</pointsize>
+              <family>三极纤云简体</family>
+              <pointsize>48</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -234,8 +239,10 @@
             </property>
             <property name="font">
              <font>
-              <family>Arial</family>
+              <family>三极纤云简体</family>
               <pointsize>20</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="layoutDirection">
@@ -365,7 +372,10 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>30</pointsize>
+                <family>三极纤云简体</family>
+                <pointsize>36</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -417,7 +427,10 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>30</pointsize>
+                <family>三极纤云简体</family>
+                <pointsize>36</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -469,7 +482,10 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>15</pointsize>
+                <family>三极纤云简体</family>
+                <pointsize>16</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -521,7 +537,10 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>15</pointsize>
+                <family>三极纤云简体</family>
+                <pointsize>16</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -641,7 +660,10 @@
               </property>
               <property name="font">
                <font>
+                <family>三极纤云简体</family>
                 <pointsize>20</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -744,7 +766,10 @@
               </property>
               <property name="font">
                <font>
+                <family>三极纤云简体</family>
                 <pointsize>20</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
@@ -847,7 +872,10 @@
               </property>
               <property name="font">
                <font>
+                <family>三极纤云简体</family>
                 <pointsize>20</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">
