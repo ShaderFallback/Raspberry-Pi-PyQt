@@ -22,6 +22,7 @@ countUpdate_1 = False
 countUpdate_2 = False
 countUpdate_3 = False
 countUpdate_4 = False
+platformBool = False
 
 def UpdateWeatherIcon(tempType):  #匹配天气类型图标
     if(tempType == "大雨"  or tempType == "中到大雨"):
@@ -73,10 +74,22 @@ def getTemp():
         (r.json()['data']['forecast'][3]['high']),  #大后日高温
         (r.json()['data']['forecast'][3]['type']),  #大后日天气
 
+        (r.json()['data']['forecast'][0]['fx']),  #今日风向
+        (r.json()['data']['forecast'][0]['fl']),  
+
+        (r.json()['data']['forecast'][1]['fx']),  #明日风向
+        (r.json()['data']['forecast'][1]['fl']),  
+
+        (r.json()['data']['forecast'][2]['fx']),  #后日风向
+        (r.json()['data']['forecast'][2]['fl']),  
+
+        (r.json()['data']['forecast'][3]['fx']),  #大后日风向
+        (r.json()['data']['forecast'][3]['fl']),  
+
         (r.json()['cityInfo']['updateTime'])        #更新时间
         ]
     except:
-        tempList = ["---"]*14
+        tempList = ["---"]*22
         return tempList
     else:
         return tempList
@@ -176,12 +189,15 @@ class UpdateBackground(QThread):
     def run(self):
         global picInt
         global picCount
+        global platformBool
         while True:
             if picInt == 59:#每分钟更新一次
-                # cpuTemp = get_cpu_temp()
-                # gpuTemp = get_gpu_temp()
-                cpuTemp = 23
-                gpuTemp = 23
+                if(platformBool):
+                    cpuTemp = 23
+                    gpuTemp = 23
+                else:
+                    cpuTemp = get_cpu_temp()
+                    gpuTemp = get_gpu_temp()
 
                 ipTemp = get_host_ip()
                 picCount += 1
@@ -240,6 +256,11 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
         uic.loadUi(runDirectory + "/test.ui", self)
         QtGui.QFontDatabase.addApplicationFont(runDirectory +"/三极纤云简体.ttf")
+        global platformBool
+        if(sys.platform == "win32"):
+            platformBool = True
+        else:
+            platformBool = False
 
         self.thread = UpdateTime() # 创建一个线程
         self.thread.signal.connect(self.TimeTick) #绑定信号触法的函数
@@ -253,15 +274,19 @@ class Ui(QtWidgets.QMainWindow):
         self.thread3.signa3.connect(self.setWeather) 
         self.thread3.start()  
 
-       # cpuTemp = get_cpu_temp()
-       # gpuTemp = get_gpu_temp()
-        cpuTemp = 23
-        gpuTemp = 23
+        if(platformBool):
+            cpuTemp = 23
+            gpuTemp = 23
+        else:
+            cpuTemp = get_cpu_temp()
+            gpuTemp = get_gpu_temp()
+        
 
         ipTemp = get_host_ip()
         self.label_Temp.setText("CPU温度:"+str(cpuTemp) +" GPU温度:"+ str(gpuTemp) )
         self.label_IP.setText("IP:"+ipTemp)
         self.show()
+
         global tempArray
         tempArray = UpdateData()
 
@@ -279,7 +304,7 @@ class Ui(QtWidgets.QMainWindow):
         palette = QPalette() #设置调色板
         palette.setBrush(QPalette.Background, QBrush(QPixmap.fromImage(ImageQt(CombineImage(img,img2)))))
         self.setPalette(palette)
-        self.label_Temp.setText("CPU温度:"+str(cpuTemp) +" GPU温度:"+ str(gpuTemp))
+        self.label_Temp.setText("CPU温度:"+str(cpuTemp) +"      GPU温度:"+ str(gpuTemp))
         self.label_IP.setText("IP:"+ipTemp)
 
     def setWeather(self):
@@ -300,6 +325,12 @@ class Ui(QtWidgets.QMainWindow):
         afterTomorrowStr = tempArray[12] +" "+ LowTempStr(tempArray[10]) + "~" + HightTempStr(tempArray[11]) +"度"
         self.afterTomorrow_Temp.setText(afterTomorrowStr)
 
+        self.today_wind.setText(tempArray[13]+": "+tempArray[14])
+        self.tomorrow_wind.setText(tempArray[13]+": "+tempArray[14])
+        self.acquired_wind.setText(tempArray[15]+": "+tempArray[16])
+        self.afterTomorrow_wind.setText(tempArray[15]+": "+tempArray[16])
+
+
 app = QtWidgets.QApplication(sys.argv)
 window = Ui()
 
@@ -311,7 +342,7 @@ img2 = runDirectory+"/BackgroundBlack.png"
 palette = QPalette() #启动时先设一个背景
 #palette.setBrush(QPalette.Background, QBrush(QPixmap(runDirectory+"/Background4.png")))
 palette.setBrush(QPalette.Background, QBrush(QPixmap.fromImage(ImageQt(CombineImage(img,img2)))))
-
 window.setPalette(palette)
-window.showFullScreen() #全屏显示
+if(platformBool==False):
+    window.showFullScreen() #全屏显示
 app.exec_()
