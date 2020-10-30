@@ -74,19 +74,19 @@ def getTemp():
         (r.json()['data']['forecast'][3]['high']),  #大后日高温
         (r.json()['data']['forecast'][3]['type']),  #大后日天气
 
-        (r.json()['data']['forecast'][0]['fx']),  #今日风向
+        (r.json()['data']['forecast'][0]['fx']),  #今日风向13
         (r.json()['data']['forecast'][0]['fl']),  
 
-        (r.json()['data']['forecast'][1]['fx']),  #明日风向
+        (r.json()['data']['forecast'][1]['fx']),  #明日风向15
         (r.json()['data']['forecast'][1]['fl']),  
 
-        (r.json()['data']['forecast'][2]['fx']),  #后日风向
+        (r.json()['data']['forecast'][2]['fx']),  #后日风向17
         (r.json()['data']['forecast'][2]['fl']),  
 
-        (r.json()['data']['forecast'][3]['fx']),  #大后日风向
+        (r.json()['data']['forecast'][3]['fx']),  #大后日风向19
         (r.json()['data']['forecast'][3]['fl']),  
 
-        (r.json()['cityInfo']['updateTime'])        #更新时间
+        (r.json()['cityInfo']['updateTime'])        #更新时间21
         ]
     except:
         tempList = ["---"]*22
@@ -114,9 +114,11 @@ def get_host_ip():
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 80))
         ip = s.getsockname()[0]
-    finally:
         s.close()
-    return str(ip)
+        return str(ip)
+    except:
+        s.close()
+        return "0.0.0.0"
 
 def todayWeek(nowWeek):
     if nowWeek == "0":
@@ -281,14 +283,15 @@ class Ui(QtWidgets.QMainWindow):
             cpuTemp = get_cpu_temp()
             gpuTemp = get_gpu_temp()
         
-
+        global tempArray
+        tempArray = UpdateData()
         ipTemp = get_host_ip()
-        self.label_Temp.setText("CPU温度:"+str(cpuTemp) +" GPU温度:"+ str(gpuTemp) )
+        #self.label_Temp.setText("CPU温度:"+str(cpuTemp) +" GPU温度:"+ str(gpuTemp) )
+        self.label_Temp.setText("CPU:"+ str(round(cpuTemp)) + "   GPU:"+ str(round(gpuTemp)) +"  "+ tempArray[0]+" "+tempArray[21])
         self.label_IP.setText("IP:"+ipTemp)
         self.show()
 
-        global tempArray
-        tempArray = UpdateData()
+        
 
     def TimeTick(self,msg,msg2,msg3): #注意传参变量要写
         self.time_Label.setText(msg) 
@@ -297,19 +300,20 @@ class Ui(QtWidgets.QMainWindow):
 
 
     def setBackground(self,intCount,cpuTemp,gpuTemp,ipTemp):
-
+        global tempArray
         img2 = runDirectory+"/BackgroundBlack.png"
         img =  runDirectory+"/Background"+ str(intCount)+".png"
 
         palette = QPalette() #设置调色板
         palette.setBrush(QPalette.Background, QBrush(QPixmap.fromImage(ImageQt(CombineImage(img,img2)))))
         self.setPalette(palette)
-        self.label_Temp.setText("CPU温度:"+str(cpuTemp) +"      GPU温度:"+ str(gpuTemp))
+        #self.label_Temp.setText("CPU温度:"+str(cpuTemp) +"      GPU温度:"+ str(gpuTemp))
+        self.label_Temp.setText("CPU:"+ str(round(cpuTemp)) + "   GPU:"+ str(round(gpuTemp)) +"  "+ tempArray[0]+" "+tempArray[21])
         self.label_IP.setText("IP:"+ipTemp)
 
     def setWeather(self):
         global tempArray
-        self.Icon_Today.setPixmap(ImageLoad(UpdateWeatherIcon(tempArray[3]),1))
+        self.Icon_Today.setPixmap(ImageLoad(UpdateWeatherIcon(tempArray[3]),0.8))
         self.today_Weather.setText(tempArray[3])
         self.today_Temp.setText(LowTempStr(tempArray[1]) + "~" + HightTempStr(tempArray[2]) +"度")
 
@@ -326,9 +330,9 @@ class Ui(QtWidgets.QMainWindow):
         self.afterTomorrow_Temp.setText(afterTomorrowStr)
 
         self.today_wind.setText(tempArray[13]+": "+tempArray[14])
-        self.tomorrow_wind.setText(tempArray[13]+": "+tempArray[14])
-        self.acquired_wind.setText(tempArray[15]+": "+tempArray[16])
-        self.afterTomorrow_wind.setText(tempArray[15]+": "+tempArray[16])
+        self.tomorrow_wind.setText(tempArray[15]+": "+tempArray[16])
+        self.acquired_wind.setText(tempArray[17]+": "+tempArray[18])
+        self.afterTomorrow_wind.setText(tempArray[19]+": "+tempArray[20])
 
 
 app = QtWidgets.QApplication(sys.argv)
